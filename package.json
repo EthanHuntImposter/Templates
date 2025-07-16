@@ -1,0 +1,13 @@
+{
+  "name": "com.ethanhuntimposter.template",
+  "version": "1.0.0",
+  "displayName": "Template",
+  "description": "Custom template for quickstart setup of new Unity projects",
+  "unity": "2023.2",
+  "dependencies": {
+    "com.unity.inputsystem": "1.7.0"
+ },
+  "author": {
+    "name": "Ethan Hunt"
+  }
+}
