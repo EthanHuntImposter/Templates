@@ -7,6 +7,17 @@ using UnityEngine.InputSystem;
 
 namespace Template {
     public class Settings : MonoBehaviour {
+        [HideInInspector] public static Settings instance;
+
+        private void Awake() {
+            if (instance == null) {
+                instance = this;
+            }
+            else {
+                Destroy(gameObject);
+            }
+        }
+
         //Subscribe and unsibscribe from SettingsUI events
         private void OnEnable() {
             SettingsUI.FullscreenClicked += Fullscreen;
@@ -33,7 +44,9 @@ namespace Template {
         }
 
         private void Start() {
-            ScriptManager.instance.Settings = this;
+            //Removes itself from parent game object then stop self from being destroyed on scene change
+            gameObject.transform.parent = null;
+            DontDestroyOnLoad(gameObject);
 
             //Setup default values for all settings for if player saves without changing that setting
             resolutions = Screen.resolutions; for (int i = 0; i < resolutions.Length; i++) {
@@ -48,11 +61,6 @@ namespace Template {
             quality = QualitySettings.GetQualityLevel();
         }
 
-        //Settings UI menu events
-        public static event Action OpenSettingsMenu;
-        public static event Action CloseSettingsMenu;
-
-
         bool settingsMenuOpen = false;
 
         // Update is called once per frame
@@ -60,12 +68,12 @@ namespace Template {
             //Menu open/close
             if (InputManager.instance.SettingsMenu) {
                 if (settingsMenuOpen) {
-                    CloseSettingsMenu?.Invoke();
                     settingsMenuOpen = false;
+                    SettingsUI.instance.CloseSettings();
                 }
                 else {
-                    OpenSettingsMenu?.Invoke();
                     settingsMenuOpen = true;
+                    SettingsUI.instance.OpenSettings();
                 }
             }
 
@@ -113,9 +121,8 @@ namespace Template {
             currentRes = newResIndex;
         }
 
+        //Swaps between no vync and every v blank - can change to dropdown to also include every second v blank
         int vSyncCount;
-        public static event Action VSyncChanged; //Event for UI text
-                                                 //Swaps between no vync and every v blank - can change to dropdown to also include every second v blank
         void ChangeVsync() {
             if (QualitySettings.vSyncCount == 0) {
                 QualitySettings.vSyncCount = 1;
@@ -124,7 +131,8 @@ namespace Template {
                 QualitySettings.vSyncCount = 0;
             }
             vSyncCount = QualitySettings.vSyncCount;
-            VSyncChanged?.Invoke();
+
+            SettingsUI.instance.UpdateVSyncText();
         }
 
         //Change unity quality settings
@@ -206,8 +214,8 @@ namespace Template {
 
             InputManager.instance.InputsLoad(saveData.inputs);
 
-            ScriptManager.instance.SettingsUI.UpdateSettingsMenuOnLoad(currentRes, quality, vSyncCount, masterVolCache, musicVolCache, sfxVolCache);
-            ScriptManager.instance.SettingsUI.UpdateControlsTextOnLoad();
+            SettingsUI.instance.UpdateSettingsMenuOnLoad(currentRes, quality, vSyncCount, masterVolCache, musicVolCache, sfxVolCache);
+            SettingsUI.instance.UpdateControlsTextOnLoad();
         }
     }
 

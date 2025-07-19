@@ -22,8 +22,11 @@ namespace Template {
         }
 
         private void Start() {
+            //Removes itself from parent game object then stop self from being destroyed on scene change
+            gameObject.transform.parent = null;
+            DontDestroyOnLoad(gameObject);
+
             playerInput = GetComponent<PlayerInput>();
-            ScriptManager.instance.InputManager = this;
 
             GetInputActions();
         }
@@ -77,12 +80,13 @@ namespace Template {
             action.Enable();
             //Reset binding index to 0 for non composite controls
         }
+
         //Gets reference to correct index in composite controls 
         //0 refers to parent 2d vector action - counts actual control bindings from 1
+        int bindingIndex = 0;
         public void RemapBindingCompositeIndex(ClickEvent ev, int index) {
             bindingIndex = index;
         }
-        int bindingIndex = 0;
 
         //Actions to affect settings ui and show that a button is being remapped
         public static event Action ShowRemapWarning;

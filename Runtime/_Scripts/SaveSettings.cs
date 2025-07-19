@@ -17,7 +17,7 @@ namespace Template {
 
         //All save functions run in here then write to json file
         public static void Save() {
-            ScriptManager.instance.Settings.Save(ref saveData.SettingsSaveData);
+            Settings.instance.Save(ref saveData.SettingsSaveData);
 
             File.WriteAllText(SaveFileName(), JsonUtility.ToJson(saveData));
         }
@@ -27,7 +27,7 @@ namespace Template {
             string fileText = File.ReadAllText(SaveFileName());
             saveData = JsonUtility.FromJson<SaveData>(fileText);
 
-            ScriptManager.instance.Settings.Load(saveData.SettingsSaveData);
+            Settings.instance.Load(saveData.SettingsSaveData);
         }
     }
 }

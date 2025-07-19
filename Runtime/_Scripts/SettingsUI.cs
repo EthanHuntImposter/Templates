@@ -1,24 +1,41 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using UnityEditor;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.UIElements;
 
 namespace Template {
     public class SettingsUI : MonoBehaviour {
+        [HideInInspector] public static SettingsUI instance;
+
+        private void Awake() {
+            if (instance == null) {
+                instance = this;
+            }
+            else {
+                Destroy(gameObject);
+            }
+        }
+
         [SerializeField] UIDocument doc;
         [SerializeField] StyleSheet style;
 
         // Start is called before the first frame update
         void Start() {
-            StartCoroutine(Generate());
+            //Removes itself from parent game object then stop self from being destroyed on scene change
+            gameObject.transform.parent = null;
+            DontDestroyOnLoad(gameObject);
 
-            ScriptManager.instance.SettingsUI = this;
+            StartCoroutine(Generate());
         }
 
         private void OnValidate() {
             if (Application.isPlaying) { return; } //Dont run twice if playing
+
+            if(PrefabUtility.GetPrefabInstanceStatus(gameObject) == PrefabInstanceStatus.NotAPrefab) {  return; } //Returns from prefab menu (avoids coroutine errors)
+
             StartCoroutine(Generate());
         }
 
@@ -321,11 +338,6 @@ namespace Template {
 
             showControls += ShowControlsSettings;
 
-            Settings.OpenSettingsMenu += OpenSettings;
-            Settings.CloseSettingsMenu += CloseSettings;
-
-            Settings.VSyncChanged += UpdateVSyncText;
-
             InputManager.ShowRemapWarning += ShowRemapWarning;
             InputManager.NewRemapKey += SetNewRemapKeyText;
         }
@@ -341,18 +353,13 @@ namespace Template {
 
             showControls -= ShowControlsSettings;
 
-            Settings.OpenSettingsMenu -= OpenSettings;
-            Settings.CloseSettingsMenu -= CloseSettings;
-
-            Settings.VSyncChanged -= UpdateVSyncText;
-
             InputManager.ShowRemapWarning -= ShowRemapWarning;
             InputManager.NewRemapKey -= SetNewRemapKeyText;
         }
 
         //Opening and closing WHOLE menu
         bool menuOpen = false;
-        void OpenSettings() {
+        public void OpenSettings() {
             if (menuOpen) { return; }
             menuOpen = true;
 
@@ -360,7 +367,7 @@ namespace Template {
             ShowGeneralSettings();
         }
 
-        void CloseSettings() {
+        public void CloseSettings() {
             if (!menuOpen) { return; }
             menuOpen = false;
 
@@ -397,7 +404,7 @@ namespace Template {
         }
 
         //UI updates from other scripts
-        void UpdateVSyncText() {
+        public void UpdateVSyncText() {
             if (vSyncText.text == "On") {
                 vSyncText.text = "Off";
             }
@@ -406,7 +413,7 @@ namespace Template {
             }
         }
 
-        void ShowRemapWarning() {
+        public void ShowRemapWarning() {
             if (remapWarning.style.display == DisplayStyle.Flex) {
                 remapWarning.style.display = DisplayStyle.None;
             }
