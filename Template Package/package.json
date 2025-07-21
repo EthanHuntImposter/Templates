@@ -1,9 +1,9 @@
 {
   "name": "com.ethanhuntimposter.template",
-  "version": "1.0.0",
+  "version": "1.0.3",
   "displayName": "Template",
   "description": "Custom template for quickstart setup of new Unity projects",
-  "unity": "2023.2",
+  "unity": "2023.2.20f1",
   "dependencies": {
     "com.unity.inputsystem": "1.7.0"
  },
