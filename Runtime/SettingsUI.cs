@@ -44,9 +44,9 @@ namespace Template {
         VisualElement container;
         VisualElement tabBox;
 
-        Button generalBtn, gameplayBtn, graphicsBtn, audioBtn, controlsBtn;
+        Button generalBtn, accessibilityBtn, graphicsBtn, audioBtn, controlsBtn;
 
-        VisualElement generalSettingsBox, gameplaySettingsBox, graphicsSettingsBox, audioSettingsBox, controlsSettingsBox;
+        VisualElement generalSettingsBox, accessibiltySettingsBox, graphicsSettingsBox, audioSettingsBox, controlsSettingsBox;
 
         DropdownField resolutionDropdown;
         DropdownField qualitySettings;
@@ -79,8 +79,8 @@ namespace Template {
             generalBtn = Create<Button>("tab-button");
             generalBtn.text = "General";
 
-            gameplayBtn = Create<Button>("tab-button");
-            gameplayBtn.text = "Gameplay";
+            accessibilityBtn = Create<Button>("tab-button");
+            accessibilityBtn.text = "Accessibility";
 
             graphicsBtn = Create<Button>("tab-button");
             graphicsBtn.text = "Graphics";
@@ -92,14 +92,14 @@ namespace Template {
             controlsBtn.text = "Controls";
 
             tabBox.Add(generalBtn);
-            tabBox.Add(gameplayBtn);
+            tabBox.Add(accessibilityBtn);
             tabBox.Add(graphicsBtn);
             tabBox.Add(audioBtn);
             tabBox.Add(controlsBtn);
 
             //Tab button funcs
             generalBtn.clicked += showGeneral;
-            gameplayBtn.clicked += showGameplay;
+            accessibilityBtn.clicked += showGameplay;
             graphicsBtn.clicked += showGraphics;
             audioBtn.clicked += showAudio;
             controlsBtn.clicked += showControls;
@@ -113,10 +113,10 @@ namespace Template {
             #endregion
 
 
-            #region Gameplay Settings
-            gameplaySettingsBox = Create<ScrollView>("settings-box", "bordered-box");
-            container.Add(gameplaySettingsBox);
-            gameplaySettingsBox.style.display = DisplayStyle.None;
+            #region Accessibility Settings
+            accessibiltySettingsBox = Create<ScrollView>("settings-box", "bordered-box");
+            container.Add(accessibiltySettingsBox);
+            accessibiltySettingsBox.style.display = DisplayStyle.None;
 
             #endregion
 
@@ -377,7 +377,7 @@ namespace Template {
         //Hides all boxes before setting one box to visible
         void HideSettingsBoxes() {
             generalSettingsBox.style.display = DisplayStyle.None;
-            gameplaySettingsBox.style.display = DisplayStyle.None;
+            accessibiltySettingsBox.style.display = DisplayStyle.None;
             graphicsSettingsBox.style.display = DisplayStyle.None;
             audioSettingsBox.style.display = DisplayStyle.None;
             controlsSettingsBox.style.display = DisplayStyle.None;
@@ -388,7 +388,7 @@ namespace Template {
         }
         void ShowGameplaySettings() {
             HideSettingsBoxes();
-            gameplaySettingsBox.style.display = DisplayStyle.Flex;
+            accessibiltySettingsBox.style.display = DisplayStyle.Flex;
         }
         void ShowGraphicsSettings() {
             HideSettingsBoxes();
